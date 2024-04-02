@@ -6,13 +6,10 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.Route;
 import org.springframework.ai.chat.StreamingChatClient;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.vaadin.firitin.components.messagelist.MarkdownMessage;
 import org.vaadin.firitin.components.messagelist.MarkdownMessage.Color;
-
-import java.util.Optional;
 
 // For native image, compile with ./mvnw -DskipTests -Pnative -Pproduction native:compile
 @Push
@@ -33,8 +30,7 @@ public class VaadinAiApplication implements AppShellConfigurator {
 
 				messageList.add(userMessage, assistantMessage);
 
-				chatClient.stream(new Prompt(question))
-						.map(res -> Optional.ofNullable(res.getResult().getOutput().getContent()).orElse(""))
+				chatClient.stream(question)
 						.subscribe(assistantMessage::appendMarkdownAsync);
 			});
 
